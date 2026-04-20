@@ -100,21 +100,27 @@
 
                 <!-- Email Subscription Section -->
                 <div class="email-subscription-section">
-                    <h4>Avisarme cuando esté disponible</h4>
-                    <form id="email-subscription-form" class="subscription-form">
-                        <input type="email" id="sub-email" placeholder="Tu correo electrónico" required>
-                        <div class="sub-options">
-                            <div class="sub-group">
-                                <label class="sub-label">Material</label>
-                                <div id="sub-materials" class="sub-toggles"></div>
+                    <button class="sub-trigger" id="sub-trigger" onclick="window.toggleSubForm()" type="button">
+                        <span class="sub-trigger-icon">✉</span>
+                        Avisarme cuando esté disponible
+                        <span class="sub-trigger-arrow" id="sub-arrow">›</span>
+                    </button>
+                    <div class="sub-form-wrapper" id="sub-form-wrapper">
+                        <form id="email-subscription-form" class="subscription-form">
+                            <input type="email" id="sub-email" placeholder="Tu correo electrónico" required>
+                            <div class="sub-options">
+                                <div class="sub-group">
+                                    <label class="sub-label">Material</label>
+                                    <div id="sub-materials" class="sub-toggles"></div>
+                                </div>
+                                <div class="sub-group">
+                                    <label class="sub-label">Talle</label>
+                                    <div id="sub-sizes" class="sub-toggles"></div>
+                                </div>
                             </div>
-                            <div class="sub-group">
-                                <label class="sub-label">Talle</label>
-                                <div id="sub-sizes" class="sub-toggles"></div>
-                            </div>
-                        </div>
-                        <button type="submit">Avisarme</button>
-                    </form>
+                            <button type="submit">Avisarme</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

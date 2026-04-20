@@ -128,6 +128,14 @@ window.addToCartFromDetails = () => {
   toggleCart()
 }
 
+// ── Subscription toggle ──
+window.toggleSubForm = () => {
+  const wrapper = document.getElementById('sub-form-wrapper')
+  const arrow = document.getElementById('sub-arrow')
+  const isOpen = wrapper.classList.toggle('open')
+  arrow.style.transform = isOpen ? 'rotate(90deg)' : ''
+}
+
 // ── Size guide modal ──
 window.openSizeGuide = () => {
   document.getElementById('size-guide-overlay').classList.add('open')
