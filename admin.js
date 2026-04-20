@@ -45,12 +45,13 @@ window.logout = async () => {
   document.getElementById('auth-screen').style.display = 'flex'
 }
 
-function showDashboard() {
+async function showDashboard() {
   document.getElementById('auth-screen').style.display = 'none'
   document.getElementById('dashboard').style.display = 'block'
   initSizeToggles()
+  // Refresh session to ensure storage requests carry a valid JWT
+  await supabase.auth.refreshSession()
   loadProducts()
-  ensureBucket()
 }
 
 async function ensureBucket() {
@@ -224,16 +225,33 @@ window.handleImageSelect = (e) => {
 
 async function uploadPendingFiles(productId) {
   if (!pendingFiles.length) return []
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
+    toast('Sesión expirada. Volvé a ingresar.', true)
+    return []
+  }
+
   const prog = document.getElementById('upload-progress')
   prog.style.display = 'block'
-  prog.textContent = `Subiendo ${pendingFiles.length} foto(s)...`
 
   const urls = []
-  for (const file of pendingFiles) {
-    const ext = file.name.split('.').pop()
+  for (let i = 0; i < pendingFiles.length; i++) {
+    const file = pendingFiles[i]
+    prog.textContent = `Subiendo foto ${i + 1} de ${pendingFiles.length}...`
+
+    const ext = file.name.split('.').pop().toLowerCase()
     const path = `${productId}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
-    const { error } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true })
-    if (!error) {
+
+    const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+      contentType: file.type || 'image/jpeg',
+      cacheControl: '3600'
+    })
+
+    if (error) {
+      console.error('Upload error:', error)
+      toast(`Error al subir foto: ${error.message}`, true)
+    } else {
       const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)
       urls.push(data.publicUrl)
     }
@@ -346,15 +364,28 @@ window.handleSlideImageSelect = (e) => {
 
 window.saveSlide = async () => {
   if (!pendingSlideFile) { toast('Seleccioná una imagen', true); return }
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) { toast('Sesión expirada. Volvé a ingresar.', true); return }
+
   const btn = document.getElementById('save-slide-btn')
   btn.disabled = true
   btn.textContent = 'Guardando...'
 
-  const ext = pendingSlideFile.name.split('.').pop()
+  const ext = pendingSlideFile.name.split('.').pop().toLowerCase()
   const path = `slides/${Date.now()}.${ext}`
-  const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, pendingSlideFile, { upsert: true })
+  const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, pendingSlideFile, {
+    contentType: pendingSlideFile.type || 'image/jpeg',
+    cacheControl: '3600'
+  })
 
-  if (upErr) { toast('Error al subir imagen', true); btn.disabled = false; btn.textContent = 'Guardar'; return }
+  if (upErr) {
+    console.error('Slide upload error:', upErr)
+    toast(`Error: ${upErr.message}`, true)
+    btn.disabled = false
+    btn.textContent = 'Guardar'
+    return
+  }
 
   const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path)
 
