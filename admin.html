@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FINA — Admin</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf9f7;
+      --dark: #1a1a1a;
+      --brown: #8b6f47;
+      --border: #e8e4df;
+      --white: #fff;
+      --gray: #888;
+      --light: #f5f3f0;
+      --red: #c0392b;
+      --green: #27ae60;
+    }
+
+    body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--dark); font-size: 14px; min-height: 100vh; }
+
+    /* ── AUTH ── */
+    #auth-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .auth-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 48px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .auth-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      letter-spacing: 6px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .auth-subtitle {
+      text-align: center;
+      color: var(--gray);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .auth-card form { display: flex; flex-direction: column; gap: 16px; }
+
+    .auth-card input {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .auth-card input:focus { outline: none; border-color: var(--dark); }
+
+    .btn-primary {
+      padding: 14px;
+      background: var(--dark);
+      color: var(--white);
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .btn-primary:hover { background: var(--brown); }
+    .btn-primary:disabled { background: var(--gray); cursor: not-allowed; }
+
+    .btn-secondary {
+      padding: 10px 20px;
+      background: transparent;
+      color: var(--dark);
+      border: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--dark); }
+
+    .btn-danger {
+      padding: 8px 14px;
+      background: transparent;
+      color: var(--red);
+      border: 1px solid var(--red);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-danger:hover { background: var(--red); color: var(--white); }
+
+    .btn-edit {
+      padding: 8px 14px;
+      background: transparent;
+      color: var(--dark);
+      border: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-edit:hover { border-color: var(--dark); }
+
+    #auth-error { color: var(--red); font-size: 13px; text-align: center; display: none; }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; }
+
+    .admin-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .admin-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      letter-spacing: 4px;
+    }
+
+    .admin-nav { display: flex; gap: 0; }
+
+    .tab-btn {
+      padding: 0 20px;
+      height: 60px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--gray);
+      transition: all 0.2s;
+    }
+    .tab-btn.active { color: var(--dark); border-bottom-color: var(--dark); }
+    .tab-btn:hover { color: var(--dark); }
+
+    .admin-logout {
+      background: none;
+      border: none;
+      color: var(--gray);
+      cursor: pointer;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .admin-logout:hover { color: var(--dark); }
+
+    .admin-main { max-width: 1100px; margin: 0 auto; padding: 32px; }
+
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* ── PRODUCTS ── */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 400;
+    }
+
+    .products-table {
+      background: var(--white);
+      border: 1px solid var(--border);
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .products-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray);
+      border-bottom: 1px solid var(--border);
+      font-weight: 400;
+    }
+
+    .products-table td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .products-table tr:last-child td { border-bottom: none; }
+    .products-table tr:hover td { background: var(--cream); }
+
+    .product-thumb {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      display: block;
+    }
+    .no-img {
+      width: 56px; height: 56px;
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray);
+      font-size: 10px;
+    }
+
+    .status-badge {
+      padding: 3px 10px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+    .status-available { background: #e8f5e9; color: #2e7d32; }
+    .status-coming_soon { background: #fff3e0; color: #e65100; }
+    .status-sold_out { background: #ffebee; color: #c62828; }
+
+    .actions { display: flex; gap: 8px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 16px;
+      overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 680px;
+      padding: 40px;
+      position: relative;
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 32px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { outline: none; border-color: var(--dark); }
+
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .checkboxes, .size-toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .size-toggle {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .size-toggle.active { background: var(--dark); color: var(--white); border-color: var(--dark); }
+
+    /* Image upload */
+    .image-upload-area {
+      border: 2px dashed var(--border);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      margin-bottom: 12px;
+    }
+    .image-upload-area:hover { border-color: var(--dark); }
+    .image-upload-area input { display: none; }
+
+    .image-previews {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .image-preview-item {
+      position: relative;
+      width: 80px; height: 80px;
+    }
+    .image-preview-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .image-preview-remove {
+      position: absolute;
+      top: -6px; right: -6px;
+      width: 20px; height: 20px;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .upload-progress {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 8px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── SLIDES ── */
+    .slides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .slide-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .slide-card img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slide-card-footer {
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slide-alt { font-size: 12px; color: var(--gray); }
+
+    /* ── SUBSCRIPTIONS ── */
+    .subs-table {
+      background: var(--white);
+      border: 1px solid var(--border);
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .subs-table th, .subs-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .subs-table th { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); font-weight: 400; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--dark);
+      color: var(--white);
+      padding: 14px 24px;
+      font-size: 13px;
+      z-index: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .toast.error { background: var(--red); }
+
+    /* ── MISC ── */
+    .empty-state { text-align: center; color: var(--gray); padding: 64px 0; }
+    .loading-state { text-align: center; color: var(--gray); padding: 32px 0; font-size: 13px; }
+
+    @media (max-width: 640px) {
+      .admin-main { padding: 16px; }
+      .modal { padding: 24px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .admin-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Auth Screen -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">FINA</div>
+    <div class="auth-subtitle">Panel de administración</div>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Email" required autocomplete="email">
+      <input type="password" id="login-password" placeholder="Contraseña" required>
+      <div id="auth-error"></div>
+      <button type="submit" class="btn-primary" id="login-btn">Ingresar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <header class="admin-header">
+    <div class="admin-logo">FINA</div>
+    <nav class="admin-nav">
+      <button class="tab-btn active" onclick="switchTab('products')">Productos</button>
+      <button class="tab-btn" onclick="switchTab('slides')">Slides</button>
+      <button class="tab-btn" onclick="switchTab('subscriptions')">Suscripciones</button>
+    </nav>
+    <button class="admin-logout" onclick="logout()">Cerrar sesión</button>
+  </header>
+
+  <main class="admin-main">
+    <!-- Products Tab -->
+    <div id="tab-products" class="tab-section active">
+      <div class="section-header">
+        <h2>Productos</h2>
+        <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="openProductModal()">+ Agregar producto</button>
+      </div>
+      <div id="products-loading" class="loading-state">Cargando...</div>
+      <table class="products-table" id="products-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Bronce</th>
+            <th>Plata</th>
+            <th>Estado</th>
+            <th>Orden</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="products-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Slides Tab -->
+    <div id="tab-slides" class="tab-section">
+      <div class="section-header">
+        <h2>Slides del inicio</h2>
+        <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="openSlideModal()">+ Agregar slide</button>
+      </div>
+      <div id="slides-loading" class="loading-state">Cargando...</div>
+      <div class="slides-grid" id="slides-grid"></div>
+    </div>
+
+    <!-- Subscriptions Tab -->
+    <div id="tab-subscriptions" class="tab-section">
+      <div class="section-header">
+        <h2>Suscripciones</h2>
+        <span id="subs-count" style="color:var(--gray);font-size:13px;"></span>
+      </div>
+      <div id="subs-loading" class="loading-state">Cargando...</div>
+      <table class="subs-table" id="subs-table" style="display:none;">
+        <thead><tr><th>Email</th><th>Notificaciones</th><th>Fecha</th></tr></thead>
+        <tbody id="subs-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeProductModal()">×</button>
+    <div class="modal-title" id="modal-title">Agregar producto</div>
+
+    <form id="product-form">
+      <!-- Images -->
+      <div class="form-group">
+        <label>Fotos del producto</label>
+        <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
+          <input type="file" id="image-input" accept="image/*" multiple onchange="handleImageSelect(event)">
+          <div style="color:var(--gray);font-size:13px;">
+            Hacé clic para subir fotos<br>
+            <span style="font-size:11px;">JPG, PNG · Múltiples permitidas</span>
+          </div>
+        </div>
+        <div id="upload-progress" class="upload-progress" style="display:none;"></div>
+        <div class="image-previews" id="image-previews"></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input type="text" id="f-name" required placeholder="Ej: Anillo Rita">
+        </div>
+        <div class="form-group">
+          <label>Código</label>
+          <input type="text" id="f-code" placeholder="Ej: ART-001">
+        </div>
+        <div class="form-group full">
+          <label>Descripción</label>
+          <textarea id="f-description" placeholder="Descripción del producto..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Precio Bronce ($)</label>
+          <input type="number" id="f-price-bronce" min="0" placeholder="15000">
+        </div>
+        <div class="form-group">
+          <label>Precio Plata ($)</label>
+          <input type="number" id="f-price-plata" min="0" placeholder="22000">
+        </div>
+        <div class="form-group full">
+          <label>Cuotas / texto adicional</label>
+          <input type="text" id="f-installments" placeholder="Ej: 3 cuotas sin interés">
+        </div>
+        <div class="form-group full">
+          <label>Materiales disponibles</label>
+          <div class="checkboxes">
+            <label class="checkbox-label"><input type="checkbox" id="m-bronce" value="bronce"> Bronce</label>
+            <label class="checkbox-label"><input type="checkbox" id="m-plata" value="plata"> Plata</label>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Talles disponibles</label>
+          <div class="size-toggles" id="size-toggles"></div>
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="f-status">
+            <option value="available">Disponible</option>
+            <option value="coming_soon">Próximamente</option>
+            <option value="sold_out">Sin stock</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Orden (número)</label>
+          <input type="number" id="f-sort-order" min="0" value="0">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="closeProductModal()">Cancelar</button>
+        <button type="submit" class="btn-primary" id="save-btn" style="width:auto;padding:14px 32px;">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Slide Modal -->
+<div class="modal-overlay" id="slide-modal">
+  <div class="modal" style="max-width:480px;">
+    <button class="modal-close" onclick="closeSlideModal()">×</button>
+    <div class="modal-title">Agregar slide</div>
+    <div class="form-group">
+      <label>Imagen</label>
+      <div class="image-upload-area" onclick="document.getElementById('slide-input').click()">
+        <input type="file" id="slide-input" accept="image/*" onchange="handleSlideImageSelect(event)">
+        <div style="color:var(--gray);font-size:13px;">Hacé clic para subir imagen</div>
+      </div>
+      <div id="slide-preview" style="margin-top:12px;"></div>
+    </div>
+    <div class="form-group">
+      <label>Texto alternativo</label>
+      <input type="text" id="slide-alt" placeholder="Ej: Colección Rita">
+    </div>
+    <div class="form-group">
+      <label>Orden</label>
+      <input type="number" id="slide-order" value="0" min="0">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeSlideModal()">Cancelar</button>
+      <button class="btn-primary" id="save-slide-btn" style="width:auto;padding:14px 32px;" onclick="saveSlide()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script type="module" src="admin.js"></script>
+</body>
+</html>

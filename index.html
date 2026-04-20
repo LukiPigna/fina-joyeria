@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINA - Joyería Artesanal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">FINA</div>
+            <div class="nav-links">
+                <a href="#inicio" class="nav-link">Inicio</a>
+                <a href="#anillos" class="nav-link">Anillos</a>
+            </div>
+            <div class="cart-icon" onclick="toggleCart()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+                <span id="cart-count" class="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Slider -->
+    <section id="inicio" class="hero-slider">
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <img src="fotos/portada-grande.jpg" alt="FINA Joyería" class="slide active">
+                <img src="fotos/rita-bronce.jpg" alt="Colección Rita" class="slide">
+                <img src="fotos/marri-bronce.jpg" alt="Colección Marri" class="slide">
+                <img src="fotos/nita-bronce.jpg" alt="Colección Nita" class="slide">
+            </div>
+            <button class="slider-arrow prev" onclick="prevSlide()">‹</button>
+            <button class="slider-arrow next" onclick="nextSlide()">›</button>
+            <div class="slider-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+                <span class="dot" onclick="goToSlide(1)"></span>
+                <span class="dot" onclick="goToSlide(2)"></span>
+                <span class="dot" onclick="goToSlide(3)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="anillos" class="products-section">
+        <h2 class="section-title">Colección</h2>
+        <div class="products-grid" id="products-grid">
+            <!-- Products will be loaded dynamically -->
+            <div class="loading">Cargando productos...</div>
+        </div>
+
+        <!-- Coming Soon Section -->
+        <div class="coming-soon-section" id="coming-soon-section" style="display: none;">
+            <h2 class="section-title">Próximamente</h2>
+            <div class="products-grid" id="coming-soon-grid">
+                <!-- Coming soon products will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <h3>FINA</h3>
+                <p>Joyería artesanal hecha con amor y dedicación</p>
+            </div>
+            <a href="https://instagram.com/finajewelry___" target="_blank" class="contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+                finajewelry__
+            </a>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 FINA. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Tu Carrito</h2>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <p>Total: <span id="cart-total">$0</span></p>
+            </div>
+            <div class="slide-button-container">
+                <div class="slide-button-wrapper">
+                    <div class="slide-button-bg"></div>
+                    <button class="slide-button" id="slide-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                    </button>
+                    <span class="slide-text">Desliza para continuar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="cart-overlay" onclick="toggleCart()"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

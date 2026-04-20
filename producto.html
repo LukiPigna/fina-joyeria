@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINA - Detalles del Producto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">FINA</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Volver</a>
+                <a href="index.html#anillos" class="nav-link">Colección</a>
+            </div>
+            <div class="cart-icon" onclick="toggleCart()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+                <span id="cart-count" class="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Product Details -->
+    <section class="product-details-section">
+        <div class="product-details-container">
+            <!-- Image Gallery -->
+            <div class="product-gallery">
+                <div class="gallery-wrapper">
+                    <img id="main-image" src="" alt="Producto" class="gallery-main-image">
+                    <button class="gallery-arrow prev" onclick="prevImage()">‹</button>
+                    <button class="gallery-arrow next" onclick="nextImage()">›</button>
+                </div>
+                <div class="gallery-thumbnails">
+                    <div class="thumbnail-container" id="thumbnails"></div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info-details">
+                <div class="product-code" id="product-code"></div>
+                <h1 class="product-title" id="product-title"></h1>
+                <p class="product-description" id="product-description"></p>
+
+                <div class="product-price-section">
+                    <div class="price" id="product-price"></div>
+                    <div class="installments" id="product-installments"></div>
+                </div>
+
+                <div class="product-options">
+                    <div class="option-group">
+                        <label>Material</label>
+                        <div class="material-selector" id="material-selector">
+                            <button class="material-btn" data-material="bronce" onclick="selectMaterial('bronce')">Bronce</button>
+                            <button class="material-btn" data-material="plata" onclick="selectMaterial('plata')">Plata</button>
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <label>Talle</label>
+                        <select class="size-select" id="size-select">
+                            <option value="">Seleccionar talle</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="add-to-cart-btn" onclick="addToCartFromDetails()">Agregar al carrito</button>
+
+                <div class="size-guide-link-container">
+                    <a href="#" onclick="openSizeGuide(); return false;" class="size-guide-link">¿No sabes tu talle? Ver guía</a>
+                </div>
+
+                <!-- Email Subscription Section -->
+                <div class="email-subscription-section">
+                    <h4>Notificarme cuando esté disponible</h4>
+                    <form id="email-subscription-form" class="subscription-form">
+                        <input type="email" name="email" placeholder="Tu correo electrónico" required>
+                        <select name="notification-types">
+                            <option value="stock_alert">Cuando haya stock</option>
+                            <option value="new_product">Nuevos productos</option>
+                            <option value="coming_soon">Próximamente</option>
+                            <option value="stock_alert,new_product,coming_soon">Todas las notificaciones</option>
+                        </select>
+                        <button type="submit">Suscribirse</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Tu Carrito</h2>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <p>Total: <span id="cart-total">$0</span></p>
+            </div>
+            <div class="slide-button-container">
+                <div class="slide-button-wrapper">
+                    <div class="slide-button-bg"></div>
+                    <button class="slide-button" id="slide-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                    </button>
+                    <span class="slide-text">Desliza para continuar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="cart-overlay" onclick="toggleCart()"></div>
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="producto.js"></script>
+</body>
+</html>
