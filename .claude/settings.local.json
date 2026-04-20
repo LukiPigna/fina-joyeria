@@ -9,7 +9,17 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git rm *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(gh repo *)",
+      "Bash(vercel --version)",
+      "mcp__vercel__deploy_to_vercel",
+      "Bash(vercel link *)",
+      "Bash(vercel *)",
+      "Bash(git commit -m 'chore: add .vercel to .gitignore *)",
+      "Bash(git push *)",
+      "mcp__supabase__execute_sql",
+      "Bash(git commit -m 'fix: show real upload errors, refresh session, explicit contentType *)",
+      "Bash(git commit -m 'feat: size guide modal, alpaca material, subscription by size+material, mobile cart fix *)"
     ]
   }
 }

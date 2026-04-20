@@ -70,9 +70,11 @@ export function renderCartItems() {
   if (totalEl) totalEl.textContent = formatPrice(total)
 }
 
+const MATERIAL_LABEL = { bronce: 'Bronce', plata: 'Alpaca' }
+
 function capitalize(str) {
   if (!str) return ''
-  return str.charAt(0).toUpperCase() + str.slice(1)
+  return MATERIAL_LABEL[str] || (str.charAt(0).toUpperCase() + str.slice(1))
 }
 
 export function initCart() {

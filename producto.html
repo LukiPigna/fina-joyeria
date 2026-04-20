@@ -100,16 +100,20 @@
 
                 <!-- Email Subscription Section -->
                 <div class="email-subscription-section">
-                    <h4>Notificarme cuando esté disponible</h4>
+                    <h4>Avisarme cuando esté disponible</h4>
                     <form id="email-subscription-form" class="subscription-form">
-                        <input type="email" name="email" placeholder="Tu correo electrónico" required>
-                        <select name="notification-types">
-                            <option value="stock_alert">Cuando haya stock</option>
-                            <option value="new_product">Nuevos productos</option>
-                            <option value="coming_soon">Próximamente</option>
-                            <option value="stock_alert,new_product,coming_soon">Todas las notificaciones</option>
-                        </select>
-                        <button type="submit">Suscribirse</button>
+                        <input type="email" id="sub-email" placeholder="Tu correo electrónico" required>
+                        <div class="sub-options">
+                            <div class="sub-group">
+                                <label class="sub-label">Material</label>
+                                <div id="sub-materials" class="sub-toggles"></div>
+                            </div>
+                            <div class="sub-group">
+                                <label class="sub-label">Talle</label>
+                                <div id="sub-sizes" class="sub-toggles"></div>
+                            </div>
+                        </div>
+                        <button type="submit">Avisarme</button>
                     </form>
                 </div>
             </div>
@@ -144,6 +148,44 @@
 
     <!-- Cart Overlay -->
     <div id="cart-overlay" class="cart-overlay" onclick="toggleCart()"></div>
+
+    <!-- Size Guide Modal -->
+    <div id="size-guide-overlay" class="size-guide-overlay" onclick="closeSizeGuide()">
+        <div class="size-guide-modal" onclick="event.stopPropagation()">
+            <button class="size-guide-close" onclick="closeSizeGuide()">×</button>
+            <h2 class="size-guide-title">Guía de Talles</h2>
+            <table class="size-guide-table">
+                <thead><tr><th>Talle</th><th>Diámetro (mm)</th></tr></thead>
+                <tbody>
+                    <tr><td>08</td><td>14.9</td></tr><tr><td>09</td><td>15.3</td></tr>
+                    <tr><td>10</td><td>15.7</td></tr><tr><td>11</td><td>16.1</td></tr>
+                    <tr><td>12</td><td>16.5</td></tr><tr><td>13</td><td>16.9</td></tr>
+                    <tr><td>14</td><td>17.3</td></tr><tr><td>15</td><td>17.7</td></tr>
+                    <tr><td>16</td><td>18.2</td></tr><tr><td>17</td><td>18.6</td></tr>
+                    <tr><td>18</td><td>19.0</td></tr><tr><td>19</td><td>19.4</td></tr>
+                    <tr><td>20</td><td>19.8</td></tr><tr><td>21</td><td>20.2</td></tr>
+                    <tr><td>22</td><td>20.6</td></tr><tr><td>23</td><td>21.0</td></tr>
+                    <tr><td>24</td><td>21.4</td></tr><tr><td>25</td><td>21.8</td></tr>
+                    <tr><td>26</td><td>22.2</td></tr><tr><td>27</td><td>22.6</td></tr>
+                    <tr><td>28</td><td>23.0</td></tr><tr><td>29</td><td>23.4</td></tr>
+                    <tr><td>30</td><td>23.8</td></tr>
+                </tbody>
+            </table>
+            <div class="size-guide-tips">
+                <h3>Cómo medir tu talle</h3>
+                <ul>
+                    <li><strong>Con un anillo que ya tengas:</strong> Medí el diámetro interno y comparalo con la tabla.</li>
+                    <li><strong>Con un hilo:</strong> Enrollalo alrededor de tu dedo, marcá donde se une y medí el largo. Dividí por 3.14 para obtener el diámetro.</li>
+                </ul>
+                <h3 style="margin-top:16px;">Consejos</h3>
+                <ul>
+                    <li>Medí al final del día, cuando el dedo está más hinchado.</li>
+                    <li>Si estás entre dos talles, elegí el más grande.</li>
+                    <li>La temperatura puede afectar el tamaño del dedo.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="script.js"></script>
     <script type="module" src="producto.js"></script>
